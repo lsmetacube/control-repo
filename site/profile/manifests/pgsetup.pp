@@ -1,4 +1,4 @@
-class profile::pgsetup { 'postgresql::server':
+class { 'postgresql::server':
 }
 
 postgresql::server::db { 'mydatabasename':

@@ -70,7 +70,7 @@ class pgdbcustom::pgmscluster (
       listen_addresses => "localhost,$master_IP_address",
       pg_hba_conf_defaults => $pg_hba_conf_defaults,
     }
-    file { '/var/lib/postgresql/9.5/main/recovery.conf':
+    file { '/var/lib/postgresql/9.3/main/recovery.conf':
       ensure => 'absent',
     }
     postgresql::server::config_entry { 'wal_keep_segments':

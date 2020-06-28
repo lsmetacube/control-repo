@@ -40,6 +40,12 @@ class pgdbcustom::pgmscluster (
       restore_command => 'cp /path/to/archive/%f %p',
       archive_cleanup_command => 'pg_archivecleanup /path/to/archive %r',
     }
+    postgresql::server::config_entry { 'wal_keep_segments':
+      value => '16',
+    }
+    postgresql::server::config_entry { 'checkpoint_segments':
+      value => '16',
+    }
     postgresql::server::config_entry { 'wal_level':
       value => 'hot_standby',
     }

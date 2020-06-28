@@ -39,10 +39,7 @@ class pgdbcustom::pgmscluster (
       trigger_file => "$trigger_file",
     }
     postgresql::server::config_entry { 'wal_keep_segments':
-      value => '16',
-    }
-    postgresql::server::config_entry { 'checkpoint_segments':
-      value => '16',
+      value => '32',
     }
     postgresql::server::config_entry { 'wal_level':
       value => 'hot_standby',
@@ -77,10 +74,7 @@ class pgdbcustom::pgmscluster (
       ensure => 'absent',
     }
     postgresql::server::config_entry { 'wal_keep_segments':
-      value => '16',
-    }
-    postgresql::server::config_entry { 'checkpoint_segments':
-      value => '16',
+      value => '32',
     }
     postgresql::server::role { "$user":
       password_hash      => postgresql_password("$user", "$password"),

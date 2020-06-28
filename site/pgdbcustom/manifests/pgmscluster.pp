@@ -29,7 +29,7 @@ class pgdbcustom::pgmscluster (
     $default_slave_acl = ["host replication $user $master_IP_address/32 md5"]
     class { 'postgresql::server':
       ipv4acls             => concat($default_slave_acl, $extra_acls),
-      listen_addresses     => "localhost,$slave_IP_address",
+      listen_addresses     => "*",
       manage_recovery_conf => true,
       pg_hba_conf_defaults => $pg_hba_conf_defaults,
     }
@@ -67,7 +67,7 @@ class pgdbcustom::pgmscluster (
     $default_master_acl = ["host replication $user $slave_IP_address/32 md5"]
     class { 'postgresql::server':
       ipv4acls         => concat($default_master_acl, $extra_acls),
-      listen_addresses => "localhost,$master_IP_address",
+      listen_addresses => "*",
       pg_hba_conf_defaults => $pg_hba_conf_defaults,
     }
     file { '/var/lib/postgresql/9.3/main/recovery.conf':

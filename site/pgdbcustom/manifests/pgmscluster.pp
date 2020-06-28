@@ -37,6 +37,8 @@ class pgdbcustom::pgmscluster (
       standby_mode => 'on',
       primary_conninfo => "host=$master_IP_address port=$port user=$user password=$password",
       trigger_file => "$trigger_file",
+      restore_command => 'cp /path/to/archive/%f %p',
+      archive_cleanup_command => 'pg_archivecleanup /path/to/archive %r',
     }
     postgresql::server::config_entry { 'wal_level':
       value => 'hot_standby',

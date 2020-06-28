@@ -80,6 +80,7 @@ class pgdbcustom::pgmscluster (
       password_hash      => postgresql_password("$user", "$password"),
         replication      => true,
         connection_limit => 1,
+	require		 => Class['Postgresql::Server'],
     }
     postgresql::server::config_entry { 'wal_level':
       value => 'hot_standby',

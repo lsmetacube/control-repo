@@ -37,8 +37,6 @@ class pgdbcustom::pgmscluster (
       standby_mode => 'on',
       primary_conninfo => "host=$master_IP_address port=$port user=$user password=$password",
       trigger_file => "$trigger_file",
-      restore_command => 'cp /path/to/archive/%f %p',
-      archive_cleanup_command => 'pg_archivecleanup /path/to/archive %r',
     }
     postgresql::server::config_entry { 'wal_keep_segments':
       value => '16',
@@ -77,6 +75,12 @@ class pgdbcustom::pgmscluster (
     }
     file { '/var/lib/postgresql/9.5/main/recovery.conf':
       ensure => 'absent',
+    }
+    postgresql::server::config_entry { 'wal_keep_segments':
+      value => '16',
+    }
+    postgresql::server::config_entry { 'checkpoint_segments':
+      value => '16',
     }
     postgresql::server::role { "$user":
       password_hash      => postgresql_password("$user", "$password"),

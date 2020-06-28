@@ -26,7 +26,7 @@ class pgdbcustom::pgmscluster (
   }
 
   if $::ipaddress == $slave_IP_address {
-    $default_slave_acl = ["host replication $user $master_IP_address/32 md5"]
+    $default_slave_acl = ["host replication $user $master_IP_address/32 trust"]
     class { 'postgresql::server':
       ipv4acls             => concat($default_slave_acl, $extra_acls),
       listen_addresses     => "localhost,$slave_IP_address",
@@ -67,7 +67,7 @@ class pgdbcustom::pgmscluster (
     }
   }
   else {
-    $default_master_acl = ["host replication $user $slave_IP_address/32 md5"]
+    $default_master_acl = ["host replication $user $slave_IP_address/32 trust"]
     class { 'postgresql::server':
       ipv4acls         => concat($default_master_acl, $extra_acls),
       listen_addresses => "localhost,$master_IP_address",

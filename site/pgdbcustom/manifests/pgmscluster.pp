@@ -50,7 +50,7 @@ class pgdbcustom::pgmscluster (
       value => 'cd .',
     }
     postgresql::server::config_entry { 'max_wal_senders':
-      value => '1',
+      value => '2',
     }
     postgresql::server::config_entry { 'hot_standby':
       value => 'on',

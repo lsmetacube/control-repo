@@ -29,34 +29,29 @@ class pgdbcustom::pgmscluster (
     $default_slave_acl = ["host replication $user $master_IP_address/32 md5"]
     class { 'postgresql::server':
       ipv4acls             => concat($default_slave_acl, $extra_acls),
-      listen_addresses     => "*",
+      listen_addresses     => "localhost,$slave_IP_address",
       manage_recovery_conf => true,
       pg_hba_conf_defaults => $pg_hba_conf_defaults,
     }
     postgresql::server::recovery { 'postgresrecovery':
       standby_mode => 'on',
       primary_conninfo => "host=$master_IP_address port=$port user=$user password=$password",
+      restore_command => 'cd .'
       trigger_file => "$trigger_file",
-    }
-    postgresql::server::config_entry { 'wal_keep_segments':
-      value => '32',
     }
     postgresql::server::config_entry { 'wal_level':
       value => 'hot_standby',
     }
-    postgresql::server::config_entry { 'archive_mode':
-      value => 'on',
+    postgresql::server::config_entry { 'wal_keep_segments':
+      value => '8',
     }
-    postgresql::server::config_entry { 'archive_command':
-      value => 'cd .',
+    postgresql::server::config_entry { 'checkpoint_segments':
+      value => '8',
     }
     postgresql::server::config_entry { 'max_wal_senders':
-      value => '2',
+      value => '3',
     }
     postgresql::server::config_entry { 'hot_standby':
-      value => 'on',
-    }
-    postgresql::server::config_entry { 'hot_standby_feedback':
       value => 'on',
     }
     postgresql::server::config_entry { 'max_connections':
@@ -67,14 +62,11 @@ class pgdbcustom::pgmscluster (
     $default_master_acl = ["host replication $user $slave_IP_address/32 md5"]
     class { 'postgresql::server':
       ipv4acls         => concat($default_master_acl, $extra_acls),
-      listen_addresses => "*",
+      listen_addresses => "localhost,$master_IP_address",
       pg_hba_conf_defaults => $pg_hba_conf_defaults,
     }
     file { '/var/lib/postgresql/9.3/main/recovery.conf':
       ensure => 'absent',
-    }
-    postgresql::server::config_entry { 'wal_keep_segments':
-      value => '32',
     }
     postgresql::server::role { "$user":
       password_hash      => postgresql_password("$user", "$password"),
@@ -85,6 +77,12 @@ class pgdbcustom::pgmscluster (
     postgresql::server::config_entry { 'wal_level':
       value => 'hot_standby',
     }
+    postgresql::server::config_entry { 'wal_keep_segments':
+      value => '8',
+    }
+    postgresql::server::config_entry { 'checkpoint_segments':
+      value => '8',
+    }
     postgresql::server::config_entry { 'archive_mode':
       value => 'on',
     }
@@ -92,10 +90,7 @@ class pgdbcustom::pgmscluster (
       value => 'cd .',
     }
     postgresql::server::config_entry { 'max_wal_senders':
-      value => '1',
-    }
-    postgresql::server::config_entry { 'hot_standby':
-      value => 'on',
+      value => '3',
     }
     postgresql::server::config_entry { 'max_connections':
       value => '1000',

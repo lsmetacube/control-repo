@@ -36,7 +36,7 @@ class pgdbcustom::pgmscluster (
     postgresql::server::recovery { 'postgresrecovery':
       standby_mode => 'on',
       primary_conninfo => "host=$master_IP_address port=$port user=$user password=$password",
-      restore_command => 'cd .'
+      restore_command => 'cd .',
       trigger_file => "$trigger_file",
     }
     postgresql::server::config_entry { 'wal_level':
